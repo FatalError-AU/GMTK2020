@@ -11,13 +11,13 @@ namespace GMTK2020.UI
         public const int MAIN_MENU = 1;
         
         public static bool pauseLocked;
-        public const string FIRST_SCENE = "Assets/Scenes/Level1.unity";
+        public const string FIRST_SCENE = "Assets/Scenes/GameScene.unity";
 
         public MenuController controller;
 
         public void StartGame()
         {
-            //TODO
+            SceneTransition.LoadScene(FIRST_SCENE);
         }
 
         public void OpenMenu(MenuController.Menu menu)

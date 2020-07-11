@@ -335,16 +335,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 381577770694442490, guid: 1776ba20c9f23e7479e401003153be3e,
-        type: 3}
-      propertyPath: m_text
-      value: FPS Display
-      objectReference: {fileID: 0}
-    - target: {fileID: 864269895576247401, guid: 1776ba20c9f23e7479e401003153be3e,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 889996498428010102, guid: 1776ba20c9f23e7479e401003153be3e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -460,22 +450,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4158025881692107563, guid: 1776ba20c9f23e7479e401003153be3e,
-        type: 3}
-      propertyPath: values.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5357949356377652296, guid: 1776ba20c9f23e7479e401003153be3e,
         type: 3}
       propertyPath: m_Name
       value: Menus
-      objectReference: {fileID: 0}
-    - target: {fileID: 5449024053802164434, guid: 1776ba20c9f23e7479e401003153be3e,
-        type: 3}
-      propertyPath: m_text
-      value: 'Vsync
-
-'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1776ba20c9f23e7479e401003153be3e, type: 3}
