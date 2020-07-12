@@ -209,8 +209,12 @@ namespace GMTK2020.ActionTimeline
         }
 
 
+        #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
+            if (!UnityEditor.EditorApplication.isPlaying)
+                return;
+                
             Gizmos.color = Color.green;
             if (_timeline == null) return;
 
@@ -243,6 +247,7 @@ namespace GMTK2020.ActionTimeline
                 }
             }
         }
+        #endif
 
         public class TimelineAction
         {

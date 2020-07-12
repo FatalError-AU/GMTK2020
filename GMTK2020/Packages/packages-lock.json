@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.alexismorin.lightprobepopulator": {
+      "version": "file:com.alexismorin.lightprobepopulator@1.0.0",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -78,6 +84,13 @@
       "dependencies": {
         "com.unity.render-pipelines.core": "7.3.1"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.terrain-tools": {
+      "version": "3.0.1-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {

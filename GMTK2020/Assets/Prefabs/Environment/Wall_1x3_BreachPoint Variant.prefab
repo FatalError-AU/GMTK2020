@@ -1,5 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &2290451834749876495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6907560144891682546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_IgnoreFromBuild: 1
+  m_AffectedAgents: ffffffff
 --- !u!65 &6296580182443547731
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13,6 +29,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 2.5, z: 0.998533}
   m_Center: {x: 0.1, y: 1.25, z: -0.4992665}
+--- !u!259 &5035109596164050016
+LightProbeProxyVolume:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2692031702713093462}
+  m_Enabled: 1
+  m_BoundingBoxMode: 0
+  m_ResolutionX: 2
+  m_ResolutionY: 8
+  m_ResolutionZ: 4
+  m_ResolutionProbesPerUnit: 0.25
+  m_BoundingBoxSize: {x: Infinity, y: Infinity, z: Infinity}
+  m_BoundingBoxOrigin: {x: 0, y: 0, z: 0}
+  m_ResolutionMode: 1
+  m_ProbePositionMode: 0
+  m_RefreshMode: 0
+  m_QualityMode: 1
 --- !u!1001 &5989220755431695267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,6 +115,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 0519a99660eb989449b9130a77130a91, type: 2}
+    - target: {fileID: -5457795243482384295, guid: 8cc4b1a199e34db49a76e1b73c6d022d,
+        type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8cc4b1a199e34db49a76e1b73c6d022d,
         type: 3}
       propertyPath: m_Name
@@ -87,6 +127,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cc4b1a199e34db49a76e1b73c6d022d, type: 3}
+--- !u!1 &6907560144891682546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8cc4b1a199e34db49a76e1b73c6d022d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5989220755431695267}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2692031702713093462 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -702007278812074251, guid: 8cc4b1a199e34db49a76e1b73c6d022d,

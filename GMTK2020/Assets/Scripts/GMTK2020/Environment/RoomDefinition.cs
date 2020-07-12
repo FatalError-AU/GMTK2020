@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GMTK2020.ActionTimeline;
 using UnityEngine;
 
 namespace GMTK2020.Environment
@@ -12,6 +13,8 @@ namespace GMTK2020.Environment
         
         public RoomDoor[] doors;
         public bool isOutsideRoom;
+        
+        private readonly HashSet<EnemyController> _enemies = new HashSet<EnemyController>();
         
         [HideInInspector]
         public Vector2[] points =
@@ -58,8 +61,25 @@ namespace GMTK2020.Environment
             col.sharedMesh = m;
 
             center = transform.localToWorldMatrix * col.bounds.center;
+
+            if (Physics.Raycast(center, Vector3.down, out RaycastHit hit, Single.PositiveInfinity,
+                ~LayerMask.GetMask("Room Definition")))
+                center = hit.point;
+            else
+                Debug.LogError("Could not ground the center");
         }
 
+        public void RegisterEnemy(EnemyController enemy)
+        {
+            _enemies.Add(enemy);
+        }
+
+        public void EnterRoom(TimelineActor actor)
+        {
+            foreach(EnemyController enemy in _enemies)
+                enemy.PlayerDetected(actor);
+        }
+        
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.magenta;
