@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using GMTK2020.Environment;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,17 +10,35 @@ namespace GMTK2020.ActionTimeline
     {
         private NavMeshAgent _agent;
 
-        public bool Moving => (_agent.hasPath && _agent.remainingDistance <= _agent.stoppingDistance + 1.0F) ||
-                              !_agent.hasPath || _agent.pathStatus == NavMeshPathStatus.PathComplete;
+        public bool IsDone { get; private set; } = true;
+        
+        private bool Moving => Vector3.Distance(transform.position, _agent.destination) > _agent.stoppingDistance + 1F; 
         
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
         }
 
-        public void MoveTo(Vector3 position)
+        public void Act(TimelineManager.TimelineAction action)
         {
-            if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1.0F, NavMesh.AllAreas))
+            StartCoroutine(ActDo(action));
+        }
+
+        private IEnumerator ActDo(TimelineManager.TimelineAction action)
+        {
+            IsDone = false;
+
+            MoveTo(action.chosenDoor.transform.position);
+            yield return new WaitUntil(() => !Moving);
+            MoveTo(action.target.center);
+            yield return new WaitUntil(() => !Moving);
+
+            IsDone = true;
+        }
+        
+        private void MoveTo(Vector3 position)
+        {
+            if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 2.0F, NavMesh.AllAreas))
                 return;
             _agent.SetDestination(hit.position);
         }

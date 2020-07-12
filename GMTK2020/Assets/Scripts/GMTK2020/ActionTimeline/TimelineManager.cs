@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GMTK2020.Environment;
 using GMTK2020.FX;
+using GMTK2020.UI;
 using GMTK2020.UI.Ingame;
 using InspectorGadgets.Attributes;
 using UnityEngine;
@@ -31,6 +32,7 @@ namespace GMTK2020.ActionTimeline
         public int SelectedActor { get; private set; } = -1;
 
         private bool _isBuildingPath = true;
+        private int _step = 0;
 
         private void Awake()
         {
@@ -46,6 +48,8 @@ namespace GMTK2020.ActionTimeline
                 if (_currentlyOpenMenu)
                     Destroy(_currentlyOpenMenu);
 
+                ProcessTimeline();
+
                 return;
             }
 
@@ -54,6 +58,12 @@ namespace GMTK2020.ActionTimeline
                 if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
                     _currentlyOpenMenu.GetComponent<UnfoldController>().Reverse();
                 return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _isBuildingPath = false;
+                ProcessTimeline();
             }
 
             if (Input.GetKeyDown(KeyCode.Q))
@@ -82,11 +92,34 @@ namespace GMTK2020.ActionTimeline
             }
         }
 
+        private void ProcessTimeline()
+        {
+            if (!Input.GetKeyDown(KeyCode.Space))
+                return;
+
+            if (players.Any(x => !x.IsDone))
+                return;
+
+            if (_timeline.Count <= _step)
+                return;
+
+            TimelineAction[] actions = _timeline[_step];
+
+            if (actions == null) return;
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (actions[i] != null)
+                    players[i].Act(actions[i]);
+            }
+
+            _step++;
+        }
+
         public void SelectPlayer(TimelineActor actor)
         {
             SelectedActor = players.ToList().IndexOf(actor);
-        }        
-        
+        }
+
         private void OnValidate()
         {
             Array.Resize(ref players, 4);
@@ -99,95 +132,114 @@ namespace GMTK2020.ActionTimeline
 
         public void AppendAction(int player, TimelineAction action)
         {
-            int index = 0;
-            
+            int index = -1;
+
             if (_timeline.Count == 0)
+            {
                 _timeline.Add(new TimelineAction[players.Length]);
-            else if (_timeline.Last()[player] == null)
-                index = _timeline.Count - 1;
+                index = 0;
+            }
             else
+            {
+                for (int i = 0; i < _timeline.Count; i++)
+                {
+                    if (_timeline[i][player] != null) continue;
+                    
+                    index = i;
+                    break;
+                }
+            }
+
+            if(index < 0)
             {
                 index = _timeline.Count;
                 _timeline.Add(new TimelineAction[players.Length]);
             }
 
-            Vector3 source = index == 0 ? players[player].transform.position : _timeline[index - 1][player].target.center;
+            Vector3 source =
+                index == 0 ? players[player].transform.position : _timeline[index - 1][player].target.center;
 
             float minDistance = float.MaxValue;
 
-            foreach (RoomDoor door in RoomDoor.AllDoors)
-                door.DisableArea = true;
+            RoomDefinition previous = index == 0 ? RoomDefinition.OutsideRoom : _timeline[index - 1][player].target;
+
+            if (!previous.doors.Any(x => action.target.doors.Any(y => y == x)))
+            {
+                PopupMessage.Show("Can only move between two connected rooms");
+                return;
+            }
 
             foreach (RoomDoor door in action.target.doors)
             {
                 if (door.requireBreach && action.moveType != TimelineAction.MoveType.Breach)
                     continue;
-                
+
                 NavMeshPath path = new NavMeshPath();
 
-                try
+                if (!NavMesh.CalculatePath(source, door.transform.position, NavMesh.AllAreas, path))
+                    continue;
+
+                Vector3[] corners = path.corners;
+                float distance = .0F;
+                for (int i = 0; i < corners.Length; i++)
                 {
-                    door.DisableArea = false;
-                    if (!NavMesh.CalculatePath(source, door.transform.position, NavMesh.AllAreas, path))
-                        continue;
+                    Vector3 prev = source;
+                    if (i > 0)
+                        prev = corners[i - 1];
 
-                    Vector3[] corners = path.corners;
-                    float distance = .0F;
-                    for (int i = 0; i < corners.Length; i++)
-                    {
-                        Vector3 prev = source;
-                        if (i > 0)
-                            prev = corners[i - 1];
-
-                        distance += Vector3.Distance(prev, corners[i]);
-                    }
-
-                    distance += Vector3.Distance(corners.LastOrDefault(), door.transform.position);
-
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-                        action.chosenDoor = door;
-                    }
+                    distance += Vector3.Distance(prev, corners[i]);
                 }
-                finally
+
+                distance += Vector3.Distance(corners.LastOrDefault(), door.transform.position);
+
+                if (distance < minDistance)
                 {
-                    door.DisableArea = true;
+                    minDistance = distance;
+                    action.chosenDoor = door;
                 }
             }
-            
-            foreach (RoomDoor door in RoomDoor.AllDoors)
-                door.DisableArea = false;
 
             if (!action.chosenDoor)
             {
-                // TODO show error in game
-                Debug.LogError("No Path Found");
+                PopupMessage.Show("Unreachable room");
                 return;
             }
-            
+
             _timeline[index][player] = action;
         }
+
 
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
-
             if (_timeline == null) return;
-            
-            Vector3[] prev = new Vector3[players.Length];
-            for (int i = 0; i < players.Length; i++)
-                prev[i] = players[i].transform.position;
 
+            Vector3[] prev = new Vector3[players.Length];
+            for (int i = 0;
+                i < players.Length;
+                i++)
+                prev[i] = players[i].transform.position;
             foreach (TimelineAction[] ta in _timeline)
             {
                 for (int i = 0; i < ta.Length; i++)
                 {
                     if (ta[i] == null)
                         continue;
-                        
-                    Gizmos.DrawLine(prev[i], ta[i].chosenDoor.transform.position);
-                    prev[i] = ta[i].chosenDoor.transform.position;
+
+                    NavMeshPath path = new NavMeshPath();
+                    if (!NavMesh.CalculatePath(prev[i], ta[i].chosenDoor.transform.position, NavMesh.AllAreas, path))
+                    {
+                        Gizmos.DrawLine(prev[i], ta[i].chosenDoor.transform.position);
+                        continue;
+                    }
+
+                    Vector3[] corners = path.corners;
+
+                    for (int j = 1; j < corners.Length; j++)
+                        Gizmos.DrawLine(corners[j - 1], corners[j]);
+
+                    prev[i] = ta[i].target.center;
+                    Gizmos.DrawLine(corners.Last(), prev[i]);
                 }
             }
         }
@@ -204,7 +256,7 @@ namespace GMTK2020.ActionTimeline
                 moveType = type;
                 this.target = target;
             }
-            
+
             public enum MoveType
             {
                 Move,

@@ -6,9 +6,12 @@ namespace GMTK2020.Environment
 {
     public class RoomDefinition : MonoBehaviour
     {
+        public static RoomDefinition OutsideRoom { get; private set; }
+        
         [NonSerialized] public Vector3 center;
         
         public RoomDoor[] doors;
+        public bool isOutsideRoom;
         
         [HideInInspector]
         public Vector2[] points =
@@ -21,6 +24,9 @@ namespace GMTK2020.Environment
 
         private void Awake()
         {
+            if (isOutsideRoom)
+                OutsideRoom = this;
+            
             gameObject.layer = LayerMask.NameToLayer("Room Definition");
             
             Mesh m = new Mesh();
@@ -71,6 +77,12 @@ namespace GMTK2020.Environment
                 
                 Gizmos.DrawLine(new Vector3(from.x, 0, from.y), new Vector3(to.x, 0, to.y));   
             }
+            
+#if UNITY_EDITOR
+            if (!UnityEditor.EditorApplication.isPlaying) return;
+            Gizmos.matrix = Matrix4x4.identity;
+            Gizmos.DrawWireSphere(center, .5F);
+#endif
         }
 
         private void OnDrawGizmosSelected()
@@ -79,7 +91,8 @@ namespace GMTK2020.Environment
 
             foreach (RoomDoor door in doors)
             {
-                Gizmos.DrawWireSphere(door.transform.position, .5F);
+                if(door)
+                    Gizmos.DrawWireSphere(door.transform.position, .5F);
             }
         }
     }

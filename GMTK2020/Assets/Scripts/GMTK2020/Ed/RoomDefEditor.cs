@@ -25,7 +25,7 @@ namespace GMTK2020.Ed
                 if (Target.points.Length > 3)
                 {
                     Handles.color = Color.red;
-                    if(Handles.Button(value + Vector3.up * .3F, Quaternion.identity, .05F, .1F, Handles.DotHandleCap))
+                    if(Handles.Button(value + Camera.current.transform.up * .3F, Quaternion.identity, .05F, .1F, Handles.DotHandleCap))
                     {
                         List<Vector2> l = Target.points.ToList();
                         l.RemoveAt(i);
