@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace GMTK2020.ActionTimeline
@@ -20,6 +21,11 @@ namespace GMTK2020.ActionTimeline
             if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 1.0F, NavMesh.AllAreas))
                 return;
             _agent.SetDestination(hit.position);
+        }
+
+        private void OnMouseDown()
+        {
+            TimelineManager.Instance.SelectPlayer(this);
         }
     }
 }

@@ -1,0 +1,18 @@
+{
+    "name": "GMTK2020.Ed",
+    "references": [
+        "GUID:d05a39d7b39802e47b678fa7705b73e2",
+        "GUID:de90c74d1c031bf4c98cb03e4b33ce01"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

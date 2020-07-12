@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 7808967556352631670}
   - component: {fileID: 7488100276784705580}
   - component: {fileID: 8625716026011977048}
+  - component: {fileID: 157294603864117426}
   m_Layer: 0
   m_Name: ArchetypeIcon
   m_TagString: Untagged
@@ -217,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.39215687}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -233,6 +234,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &157294603864117426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516689750052181673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9622aa26b34faa46b8c5bf258800785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  popout: {fileID: 7808967556352631670}
+  selectionHighlight: {fileID: 8625716026011977048}
+  healthSlider: {fileID: 5519781419420388963}
+  healthPercentage: {fileID: 4335561289293718035}
+  transitionDuration: 0.25
+  normalColor: {r: 0, g: 0, b: 0, a: 0.39215687}
+  highlightColor: {r: 0, g: 0, b: 0, a: 0.78431374}
 --- !u!1 &2443619979887323560
 GameObject:
   m_ObjectHideFlags: 0
