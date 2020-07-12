@@ -92,12 +92,17 @@ namespace GMTK2020.ActionTimeline
             }
         }
 
+        public bool IsTurnDone(TimelineActor except = null)
+        {
+            return !players.Any(x => !x.IsDone && x != except);
+        }
+        
         private void ProcessTimeline()
         {
             if (!Input.GetKeyDown(KeyCode.Space))
                 return;
 
-            if (players.Any(x => !x.IsDone))
+            if (IsTurnDone())
                 return;
 
             if (_timeline.Count <= _step)

@@ -31,6 +31,7 @@ namespace GMTK2020.ActionTimeline
             MoveTo(action.chosenDoor.transform.position);
             yield return new WaitUntil(() => !Moving);
             
+            yield return new WaitUntil(() => TimelineManager.Instance.IsTurnDone(this));
             action.target.EnterRoom(this);
             
             MoveTo(action.target.center);
